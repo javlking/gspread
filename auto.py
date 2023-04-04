@@ -1,16 +1,31 @@
-import gspread
-from oauth2client.service_account import ServiceAccountCredentials
+## В зависимости от бота ##
+# Импортировать нужные компоненты из нужной библиотеки (aiogram)
+from aiogram import Bot, Dispatcher, executor
 
-# Обязательгные параметры
-scope = ["https://spreadsheets.google.com/feeds",
-         'https://www.googleapis.com/auth/spreadsheets',
-         "https://www.googleapis.com/auth/drive.file",
-         "https://www.googleapis.com/auth/drive"]
+## 1 ##
+# Подключиться к боту
+bot = Bot('token')
 
-# Подключаем необходимые ключи
-creds = ServiceAccountCredentials.from_json_keyfile_name("credents.json", scope)
+## 1 ##
+# Рабочее пространство для Обработчика
+dp = Dispatcher(bot)
 
-# Авторизовываемся под своим аккаунтом
-client = gspread.authorize(creds)
+## В зависимости от бота ##
+# Создаем обработчики
+@dp.message_handler()
+# Ответы на те или иные сообщения
+async def some_f(message):
+    # message.text - это сообщение от пользователя
+    if message.text == 'Привет':
+        # Ответ на сообщение
+        await message.answer('Привет')
 
-###########################
+    elif message.text == 'Как дела':
+        await message.answer('Хорошо\nКак сам?')
+
+    else:
+        await message.answer('Не понимаю вас')
+
+## 1 ##
+# Запуск всех процессов
+executor.start_polling(dp)
